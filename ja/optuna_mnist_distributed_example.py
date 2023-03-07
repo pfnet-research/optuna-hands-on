@@ -88,6 +88,8 @@ def objective_variable_depth(trial):
     
     model.add_module(f'linear[{n_hidden_layers}]', nn.Linear(last_dim, 10)) # 出力層の線形変換
 
+    model = model.to(device)
+
     # 最適化アルゴリズムの定義
     lr = trial.suggest_float("lr", 1e-5, 1e-2, log=True) # 学習率
     momentum = trial.suggest_float("momentum", 0.5, 1.0) # モーメンタム
