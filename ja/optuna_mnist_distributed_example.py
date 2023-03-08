@@ -5,6 +5,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torchvision.datasets import MNIST
 
+import sys
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # あればGPUを使う
 
 # データを読み込む (今回はデータが少ないので、全てメモリ上に入れる)
@@ -105,4 +107,7 @@ study_variable_depth = optuna.create_study(
     storage=optuna.storages.JournalStorage(optuna.storages.JournalFileStorage("./mnist_study.optuna")),  # 保存するファイルパスを指定
     study_name="distributed_study", # Study名を指定。既存のStudy名と同一のものを指定することで、同じStudyを参照できる。
     load_if_exists=True)
-study_variable_depth.optimize(objective_variable_depth, n_trials=25)
+study_variable_depth.optimize(objective_variable_depth, n_trials=int(sys.argv[1]))
+
+print(f"最良の精度: {study_variable_depth.best_value}")
+print(f"最良のハイパーパラメータ: {study_variable_depth.best_params}")
